@@ -15,23 +15,19 @@ from ..config import Config
 )
 async def _(c, m):
 
-    if m.media:
-        if not Utilities.is_valid_file(m):
-            return
-    else:
-        if not Utilities.is_url(m.text):
-            return
-
+    if (
+        m.media
+        and not Utilities.is_valid_file(m)
+        or not m.media
+        and not Utilities.is_url(m.text)
+    ):
+        return
     snt = await m.reply_text(
         "Hi there, Please wait while I'm getting everything ready to process your request!",
         quote=True,
     )
 
-    if m.media:
-        file_link = Utilities.generate_stream_link(m)
-    else:
-        file_link = m.text
-
+    file_link = Utilities.generate_stream_link(m) if m.media else m.text
     duration = await Utilities.get_duration(file_link)
     if isinstance(duration, str):
         await snt.edit_text("😟 Sorry! I cannot open the file.")
