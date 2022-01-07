@@ -18,11 +18,11 @@ async def sts_broadcast_(c, cb):
         )
         return
 
-    sts_txt = ""
     broadcast_handler = c.broadcast_ids[broadcast_id]
     broadcast_progress = broadcast_handler.get_progress()
-    for key, value in broadcast_progress.items():
-        sts_txt += f"{key} = {value}\n"
+    sts_txt = "".join(
+        f"{key} = {value}\n" for key, value in broadcast_progress.items()
+    )
 
     await cb.answer(
         text=f"Broadcast Status for {broadcast_id}\n\n{sts_txt}", show_alert=True
